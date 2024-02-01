@@ -52,3 +52,22 @@ module "s3" {
   tag_name = var.tag_name
   tag_group = var.tag_group
 }
+
+module "route53" {
+  source = "./module/route53"
+
+  alb_dns_name = module.alb.alb_dns_name
+  alb_zone_id = module.alb.alb_zone_id
+  domain_name = data.aws_ssm_parameter.domain_name.value
+  domain_zone_id = data.aws_route53_zone.default.zone_id
+}
+
+module "sns" {
+  source = "./module/sns"
+
+  name_prefix = var.name_prefix
+  tag_name = var.tag_name
+  tag_group = var.tag_group
+
+  email = data.aws_ssm_parameter.alart_mail_address.value
+}
