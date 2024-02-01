@@ -1,0 +1,58 @@
+version: '3'
+services:
+  rails:
+    build:
+      context: ./kaku-backend
+    command: tail -f /dev/null
+    volumes:
+      - ./kaku-backend:/app
+    ports:
+      - 3000:3000
+    tty: true
+    stdin_open: true
+    networks:
+      - default
+
+  next:
+    build:
+      context: ./kaku-frontend
+    volumes:
+      - ./kaku-frontend:/app
+    ports:
+      - "8000:3000"
+      - "8001:3001"
+    tty: true
+    stdin_open: true
+    networks:
+      - default
+
+  mysql_db:
+    image: mysql:8.1.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: db_development
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - mysql_cost_vloume:/var/lib/mysql
+    networks:
+      - default
+
+  redis:
+    image: redis:7.0.0
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_cost_vloume:/data
+    networks:
+      - default
+
+volumes:
+  mysql_cost_vloume:
+  redis_cost_vloume:
+
+networks:
+  default:
+    driver: bridge

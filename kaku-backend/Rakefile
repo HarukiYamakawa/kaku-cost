@@ -1,0 +1,26 @@
+# Add your own tasks in files placed in lib/tasks ending in .rake,
+# for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
+
+require_relative 'config/application'
+
+Rails.application.load_tasks
+
+desc 'Start development puma server'
+task run_dev: :environment do
+  sh "bundle exec rails s -b '0.0.0.0'"
+end
+
+desc 'First setup production puma server'
+task run_prod_first_setup: :environment do
+  puts 'run puma'
+  sh 'bundle exec puma -C config/puma.rb'
+end
+
+desc 'Start production puma server'
+task run_prod: :environment do
+  puts 'run db:migrate'
+  sh 'bundle exec rails db:migrate'
+
+  puts 'run puma'
+  sh 'bundle exec puma -C config/puma.rb'
+end

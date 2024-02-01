@@ -1,0 +1,22 @@
+FROM --platform=linux/x86_64 ruby:3.1.2
+
+ENV RAILS_ENV=production
+ENV PORT=80
+
+RUN mkdir /app
+WORKDIR /app
+
+COPY Gemfile /app/Gemfile
+COPY Gemfile.lock /app/Gemfile.lock
+
+RUN bundle install
+
+COPY . /app
+
+EXPOSE 80
+
+# 本番環境でpumaを起動する
+# ENTRYPOINT ["rake", "run_prod"]
+
+# DBのCreate等を行うために、コンテナの起動を維持するためのコマンド
+ENTRYPOINT ["rake", "run_prod_first_setup"]

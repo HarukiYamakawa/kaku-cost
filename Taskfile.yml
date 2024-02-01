@@ -1,0 +1,23 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  comp_up:
+    cmds:
+      - docker compose up -d
+  comp_build:
+    cmds:
+      - docker compose build --no-cache
+  comp_stop:
+    cmds:
+      - docker compose stop
+  comp_down:
+    cmds:
+      - docker compose down
+  rails_bash:
+    cmds:
+      - docker compose exec rails /bin/bash
+  next_bash:
+    cmds:
+      - docker compose exec next /bin/bash
