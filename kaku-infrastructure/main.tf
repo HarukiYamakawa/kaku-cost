@@ -41,4 +41,14 @@ module "alb" {
   sg_alb_id = module.security-group.sg_alb_id
 
   certificate_arn = data.aws_acm_certificate.default.arn
+
+  alb_access_log_bucket_id = module.s3.alb_access_logs_bucket_id
+}
+
+module "s3" {
+  source = "./module/s3"
+
+  name_prefix = var.name_prefix
+  tag_name = var.tag_name
+  tag_group = var.tag_group
 }
