@@ -5,7 +5,7 @@ data "aws_ssm_parameter" "domain_name" {
 
 # domainのホストゾーンを取得
 data "aws_route53_zone" "default" {
-  name         = data.aws_ssm_parameter.domain_na Ame.value
+  name         = data.aws_ssm_parameter.domain_name.value
   private_zone = false
 }
 
