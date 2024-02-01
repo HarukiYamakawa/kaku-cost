@@ -71,3 +71,13 @@ module "sns" {
 
   email = data.aws_ssm_parameter.alart_mail_address.value
 }
+
+module "cloud_watch_alarm" {
+  source = "./module/cloud-watch-alarm"
+
+  name_prefix = var.name_prefix
+  tag_name = var.tag_name
+  tag_group = var.tag_group
+
+  alart_topic_arn = module.sns.alart_topic_arn
+}

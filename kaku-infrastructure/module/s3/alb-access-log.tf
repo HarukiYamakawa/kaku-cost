@@ -66,3 +66,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "alb_access_log_bucket_lifecycl
   }
 
 }
+
+# アクセスログの送信先を定義
+resource "aws_s3_bucket_logging" "alb_access_log_bucket_logging" {
+  bucket        = aws_s3_bucket.alb_access_log_bucket.id
+  target_bucket = aws_s3_bucket.alb_access_log_bucket_bclg.id
+  target_prefix = "alb-access-log-bclg"
+}
