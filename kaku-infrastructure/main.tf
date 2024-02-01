@@ -10,3 +10,10 @@ terraform {
 provider "aws" {
   region = "ap-northeast-1"
 }
+
+module "network" {
+  source = "./module/network"
+  name_prefix = "kaku"
+  tag_name = "kaku"
+  tag_group = "kaku"
+}
