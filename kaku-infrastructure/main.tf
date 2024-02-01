@@ -41,4 +41,43 @@ module "alb" {
   sg_alb_id = module.security-group.sg_alb_id
 
   certificate_arn = data.aws_acm_certificate.default.arn
+
+  alb_access_log_bucket_id = module.s3.alb_access_logs_bucket_id
+}
+
+module "s3" {
+  source = "./module/s3"
+
+  name_prefix = var.name_prefix
+  tag_name = var.tag_name
+  tag_group = var.tag_group
+}
+
+module "route53" {
+  source = "./module/route53"
+
+  alb_dns_name = module.alb.alb_dns_name
+  alb_zone_id = module.alb.alb_zone_id
+  domain_name = data.aws_ssm_parameter.domain_name.value
+  domain_zone_id = data.aws_route53_zone.default.zone_id
+}
+
+module "sns" {
+  source = "./module/sns"
+
+  name_prefix = var.name_prefix
+  tag_name = var.tag_name
+  tag_group = var.tag_group
+
+  email = data.aws_ssm_parameter.alart_mail_address.value
+}
+
+module "cloud_watch_alarm" {
+  source = "./module/cloud-watch-alarm"
+
+  name_prefix = var.name_prefix
+  tag_name = var.tag_name
+  tag_group = var.tag_group
+
+  alart_topic_arn = module.sns.alart_topic_arn
 }

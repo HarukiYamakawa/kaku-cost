@@ -13,3 +13,7 @@ data "aws_route53_zone" "default" {
 data "aws_acm_certificate" "default" {
   domain   = data.aws_ssm_parameter.domain_name.value
 }
+
+data "aws_ssm_parameter" "alart_mail_address" {
+  name = "alart-mail-address"
+}

@@ -12,6 +12,13 @@ resource "aws_lb" "default" {
 
   security_groups    = [var.sg_alb_id]
 
+  #アクセスログをS3に保存
+  access_logs {
+    bucket  = "${var.alb_access_log_bucket_id}"
+    prefix  = "alb-access-log"
+    enabled = true
+  }
+
   tags = {
     Name = "${var.tag_name}-alb"
     group = "${var.tag_group}"
