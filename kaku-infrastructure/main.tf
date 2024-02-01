@@ -17,3 +17,13 @@ module "network" {
   tag_name = "kaku"
   tag_group = "kaku"
 }
+
+module "security-group" {
+  source = "./module/security-group"
+
+  name_prefix = var.name_prefix
+  tag_name = var.tag_name
+  tag_group = var.tag_group
+
+  vpc_id = module.network.vpc_id
+}
