@@ -80,6 +80,7 @@ module "cloud_watch_alarm" {
   tag_group = var.tag_group
 
   alart_topic_arn = module.sns.alart_topic_arn
+  rails_log_group_name = module.cloud-watch-logs.puma_log_group
 }
 
 module "waf" {
