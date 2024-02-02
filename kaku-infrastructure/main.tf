@@ -182,3 +182,14 @@ module "ecs" {
   task_health_check_grace_period_seconds_puma = var.task_health_check_grace_period_seconds_puma
 
 }
+
+module firehose {
+  source = "./module/firehose"
+
+  name_prefix = var.name_prefix
+  tag_name = var.tag_name
+  tag_group = var.tag_group
+
+  iam_role_firehose_arn = module.iam.firehose_ecs_rails_log_role_arn
+  s3_bucket_log_rails_arn = module.s3.ecs_rails_log_bucket_arn
+}
