@@ -119,3 +119,17 @@ module "event-bridge" {
   iam_role_event_bridge_export_task_arn = module.iam.event_bridge_export_task_role_arn
   sns_arn = module.sns.alart_topic_arn
 }
+
+module "vpcendpoint" {
+  source = "./module/vpc-endpoint"
+
+  name_prefix = var.name_prefix
+  tag_name = var.tag_name
+  tag_group = var.tag_group
+
+  vpc_id = module.network.vpc_id
+  subnet_vpc_endpoint_1_id = module.network.private_subnet_vpc_endpoint_1_id
+  sg_vpc_endpoint_id = module.security-group.sg_vpc_endpoint_id
+  route_nodejs_id = module.network.route_nodejs_id
+  route_puma_id = module.network.route_puma_id
+}
