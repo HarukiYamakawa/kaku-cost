@@ -13,3 +13,7 @@ output "ecs_task_role_arn" {
 output "firehose_ecs_rails_log_role_arn" {
     value = "${aws_iam_role.firehose_ecs_rails_log_role.arn}"
 }
+
+output "cwl_rails_role_arn" {
+    value = "${aws_iam_role.cwl-rails-role.arn}"
+}
