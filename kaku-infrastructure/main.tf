@@ -92,3 +92,30 @@ module "waf" {
   alb_arn = module.alb.alb_arn
   waf_traffic_log_bucket_arn = module.s3.waf_traffic_log_bucket_arn
 }
+
+module "rds" {
+  source = "./module/rds"
+
+  name_prefix = var.name_prefix
+  tag_name = var.tag_name
+  tag_group = var.tag_group
+
+  vpc_id = module.network.vpc_id
+  subnet_mysql_1_id = module.network.private_subnet_mysql_1_id
+  subnet_mysql_2_id = module.network.private_subnet_mysql_2_id
+  sg_mysql_id = module.security-group.sg_mysql_id
+}
+
+module "iam" {
+  source = "./module/iam"
+
+  name_prefix = var.name_prefix
+}
+
+module "event-bridge" {
+  source = "./module/event-bridge"
+
+  s3_bucket_log_rds_name = module.s3.rds_audit_log_bucket_name
+  iam_role_event_bridge_export_task_arn = module.iam.event_bridge_export_task_role_arn
+  sns_arn = module.sns.alart_topic_arn
+}

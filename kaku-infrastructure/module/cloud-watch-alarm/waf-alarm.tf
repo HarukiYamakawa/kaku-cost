@@ -5,6 +5,7 @@ resource "aws_cloudwatch_metric_alarm" "waf-sql-rule-set-count" {
   dimensions = {
     ManagedRuleGroup = "AWSManagedRulesSQLiRuleSet"
     WebACL           = "kaku-waf"
+    Region           = "ap-northeast-1"
   }
   period              = 60
   statistic           = "Sum"
