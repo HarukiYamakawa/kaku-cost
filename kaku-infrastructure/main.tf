@@ -92,3 +92,16 @@ module "waf" {
   alb_arn = module.alb.alb_arn
   waf_traffic_log_bucket_arn = module.s3.waf_traffic_log_bucket_arn
 }
+
+module "rds" {
+  source = "./module/rds"
+
+  name_prefix = var.name_prefix
+  tag_name = var.tag_name
+  tag_group = var.tag_group
+
+  vpc_id = module.network.vpc_id
+  subnet_mysql_1_id = module.network.private_subnet_mysql_1_id
+  subnet_mysql_2_id = module.network.private_subnet_mysql_2_id
+  sg_mysql_id = module.security-group.sg_mysql_id
+}
