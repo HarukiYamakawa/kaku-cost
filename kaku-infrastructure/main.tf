@@ -141,3 +141,44 @@ module "ecr" {
   tag_name = var.tag_name
   tag_group = var.tag_group
 }
+
+module "cloud-watch-logs" {
+  source = "./module/cloud-watch-logs"
+
+  name_prefix = var.name_prefix
+}
+
+module "ecs" {
+  source = "./module/ecs"
+
+  name_prefix = var.name_prefix
+  tag_name = var.tag_name
+  tag_group = var.tag_group
+
+  subnet_puma_1_id = module.network.private_subnet_puma_1_id
+
+  primary_db_host = module.rds.primary_db_host
+  db_name = module.rds.db_name
+
+  db_secret_username = "${data.aws_secretsmanager_secret_version.db_secret_id.arn}:username::"
+  db_secret_password = "${data.aws_secretsmanager_secret_version.db_secret_id.arn}:password::"
+
+  domain_name = data.aws_ssm_parameter.domain_name.value
+
+  #pumaのタスク定義用
+  sg_puma_id = module.security-group.sg_puma_id
+  image_puma = module.ecr.puma_repository
+  image_puma_version = var.image_puma_version
+  execution_role_arn = module.iam.ecs_task_execution_role_arn
+  task_role_arn = module.iam.ecs_task_role_arn
+  cloudwatch_log_group_arn_puma = module.cloud-watch-logs.puma_log_group
+  tg_puma_arn = module.alb.tg_puma_arn
+  task_cpu_puma = var.task_cpu_puma
+  task_memory_puma = var.task_memory_puma
+  task_container_memory_reservation_puma = var.task_container_memory_reservation_puma
+  task_container_memory_puma = var.task_container_memory_puma
+  task_container_cpu_puma = var.task_container_cpu_puma
+  task_count_puma = var.task_count_puma
+  task_health_check_grace_period_seconds_puma = var.task_health_check_grace_period_seconds_puma
+
+}
