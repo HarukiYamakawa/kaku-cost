@@ -133,3 +133,11 @@ module "vpcendpoint" {
   route_nodejs_id = module.network.route_nodejs_id
   route_puma_id = module.network.route_puma_id
 }
+
+module "ecr" {
+  source = "./module/ecr"
+
+  name_prefix = var.name_prefix
+  tag_name = var.tag_name
+  tag_group = var.tag_group
+}
