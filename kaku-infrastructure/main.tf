@@ -90,4 +90,5 @@ module "waf" {
   tag_group = var.tag_group
 
   alb_arn = module.alb.alb_arn
+  waf_traffic_log_bucket_arn = module.s3.waf_traffic_log_bucket_arn
 }
