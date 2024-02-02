@@ -9,3 +9,7 @@ output "waf_traffic_log_bucket_arn" {
 output "rds_audit_log_bucket_name" {
   value = "${aws_s3_bucket.rds_audit_log_bucket.bucket}"
 }
+
+output "ecs_rails_log_bucket_arn" {
+  value = "${aws_s3_bucket.ecs_rails_log_bucket.arn}"
+}
