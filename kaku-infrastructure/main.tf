@@ -81,3 +81,14 @@ module "cloud_watch_alarm" {
 
   alart_topic_arn = module.sns.alart_topic_arn
 }
+
+module "waf" {
+  source = "./module/waf"
+
+  name_prefix = var.name_prefix
+  tag_name = var.tag_name
+  tag_group = var.tag_group
+
+  alb_arn = module.alb.alb_arn
+  waf_traffic_log_bucket_arn = module.s3.waf_traffic_log_bucket_arn
+}
