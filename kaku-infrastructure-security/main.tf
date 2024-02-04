@@ -51,3 +51,7 @@ module "event-bridge" {
 
   sns_arn = module.sns.security_alart_topic_arn
 }
+
+module "macie" {
+  source = "./module/macie"
+}
