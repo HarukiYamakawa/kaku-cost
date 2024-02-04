@@ -55,3 +55,9 @@ module "event-bridge" {
 module "macie" {
   source = "./module/macie"
 }
+
+module "iam-access-analyzer" {
+  source = "./module/iam-access-analyzer"
+
+  name_prefix = var.name_prefix
+}
