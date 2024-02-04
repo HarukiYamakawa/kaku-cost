@@ -27,22 +27,8 @@ data "aws_iam_policy_document" "alb_access_log_bucket_policy_document" {
     ]
 
     principals {
-      type        = "Service"
-      identifiers = ["delivery.logs.amazonaws.com"]
-    }
-  }
-  statement {
-    actions = [
-      "s3:GetBucketAcl"
-    ]
-
-    resources = [
-      aws_s3_bucket.alb_access_log_bucket.arn
-    ]
-
-    principals {
-      type        = "Service"
-      identifiers = ["delivery.logs.amazonaws.com"]
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::582318560864:root"]
     }
   }
 }
