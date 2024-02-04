@@ -35,3 +35,13 @@ module "config" {
 module "security-hub" {
   source = "./module/security-hub"
 }
+
+module "sns" {
+  source = "./module/sns"
+
+  name_prefix = var.name_prefix
+  tag_name = var.tag_name
+  tag_group = var.tag_group
+
+  email = data.aws_ssm_parameter.alart_mail_address.value
+}
