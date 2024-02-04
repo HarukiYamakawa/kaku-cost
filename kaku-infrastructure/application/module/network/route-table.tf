@@ -73,3 +73,18 @@ resource "aws_route_table_association" "private_subnet_mysql_2_route" {
   subnet_id      = aws_subnet.private_subnet_mysql_2.id
   route_table_id = aws_route_table.route-mysql.id
 }
+
+#redis用のprivateサブネット用のルートテーブルを定義
+resource "aws_route_table" "route-redis" {
+  vpc_id = aws_vpc.default.id
+
+  tags = {
+    Name = "${var.tag_name}-route-redis"
+    group = "${var.tag_group}"
+  }
+}
+
+resource "aws_route_table_association" "private_subnet_redis_1_route" {
+  subnet_id      = aws_subnet.private_subnet_redis_1.id
+  route_table_id = aws_route_table.route-redis.id
+}

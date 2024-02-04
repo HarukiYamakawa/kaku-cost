@@ -165,6 +165,7 @@ module "ecs" {
 
   primary_db_host = module.rds.primary_db_host
   db_name = module.rds.db_name
+  redis_host = module.elasti-cache.redis_endpoint
 
   db_secret_username = "${data.aws_secretsmanager_secret_version.db_secret_id.arn}:username::"
   db_secret_password = "${data.aws_secretsmanager_secret_version.db_secret_id.arn}:password::"
@@ -204,6 +205,17 @@ module "ecs" {
   private_rails_api_url = data.aws_ssm_parameter.next_private_rails_api_url.value
 }
 
+module "elasti-cache" {
+  source = "./module/elasti-cache"
+
+  name_prefix = var.name_prefix
+  tag_name = var.tag_name
+  tag_group = var.tag_group
+
+  subnet_redis_1_id = module.network.private_subnet_redis_1_id
+  sg_redis_id = module.security-group.sg_redis_id
+}
+
 module firehose {
   source = "./module/firehose"
 
@@ -215,3 +227,4 @@ module firehose {
   s3_bucket_log_rails_arn = module.s3.ecs_rails_log_bucket_arn
   iam_role_cwl_firehose_arn = module.iam.cwl_rails_role_arn
 }
+
