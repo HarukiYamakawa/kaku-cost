@@ -60,6 +60,10 @@ module "route53" {
   alb_zone_id = module.alb.alb_zone_id
   domain_name = data.aws_ssm_parameter.domain_name.value
   domain_zone_id = data.aws_route53_zone.default.zone_id
+
+   vpc_id = module.network.vpc_id
+   service_discovery_domain_name = var.service_discovery_domain_name
+   service_discovery_sub_domain_name = var.service_discovery_sub_domain_name
 }
 
 module "sns" {
@@ -157,6 +161,7 @@ module "ecs" {
   tag_group = var.tag_group
 
   subnet_puma_1_id = module.network.private_subnet_puma_1_id
+  subnet_node_1_id = module.network.private_subnet_nodejs_1_id
 
   primary_db_host = module.rds.primary_db_host
   db_name = module.rds.db_name
@@ -181,7 +186,22 @@ module "ecs" {
   task_container_cpu_puma = var.task_container_cpu_puma
   task_count_puma = var.task_count_puma
   task_health_check_grace_period_seconds_puma = var.task_health_check_grace_period_seconds_puma
+  service_discovery_arn = module.route53.service_discovery_arn
 
+  sg_nodejs_id = module.security-group.sg_nodejs_id
+  image_nodejs = module.ecr.nodejs_repository
+  image_nodejs_version = var.image_nodejs_version
+  cloudwatch_log_group_arn_nodejs = module.cloud-watch-logs.nodejs_log_group
+  tg_nodejs_arn = module.alb.tg_nodejs_arn
+  task_cpu_nodejs = var.task_cpu_nodejs
+  task_memory_nodejs = var.task_memory_nodejs
+  task_container_memory_reservation_nodejs = var.task_container_memory_reservation_nodejs
+  task_container_memory_nodejs = var.task_container_memory_nodejs
+  task_container_cpu_nodejs = var.task_container_cpu_nodejs
+  task_count_nodejs = var.task_count_nodejs
+  task_health_check_grace_period_seconds_nodejs = var.task_health_check_grace_period_seconds_nodejs
+  public_rails_api_url = data.aws_ssm_parameter.next_public_rails_api_url.value
+  private_rails_api_url = data.aws_ssm_parameter.next_private_rails_api_url.value
 }
 
 module firehose {

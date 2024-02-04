@@ -93,4 +93,7 @@ resource "aws_ecs_service" "service_puma" {
 			container_name   = "kaku_puma"
 			container_port   = "80"
 		}
+  service_registries {
+    registry_arn = var.service_discovery_arn
+  }
 }
