@@ -61,3 +61,9 @@ module "iam-access-analyzer" {
 
   name_prefix = var.name_prefix
 }
+
+module "inspector" {
+  source = "./module/inspector"
+
+  account_id = data.aws_caller_identity.current.account_id
+}
