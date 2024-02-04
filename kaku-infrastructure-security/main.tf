@@ -31,3 +31,7 @@ module "config" {
   config_log_bucket_name = module.s3.config_log_bucket_name
   config_role_arn = module.iam.config_role_arn
 }
+
+module "security-hub" {
+  source = "./module/security-hub"
+}
