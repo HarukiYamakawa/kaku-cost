@@ -31,3 +31,23 @@ module "config" {
   config_log_bucket_name = module.s3.config_log_bucket_name
   config_role_arn = module.iam.config_role_arn
 }
+
+module "security-hub" {
+  source = "./module/security-hub"
+}
+
+module "sns" {
+  source = "./module/sns"
+
+  name_prefix = var.name_prefix
+  tag_name = var.tag_name
+  tag_group = var.tag_group
+
+  email = data.aws_ssm_parameter.alart_mail_address.value
+}
+
+module "event-bridge" {
+  source = "./module/event-bridge"
+
+  sns_arn = module.sns.security_alart_topic_arn
+}
