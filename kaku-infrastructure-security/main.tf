@@ -45,3 +45,9 @@ module "sns" {
 
   email = data.aws_ssm_parameter.alart_mail_address.value
 }
+
+module "event-bridge" {
+  source = "./module/event-bridge"
+
+  sns_arn = module.sns.security_alart_topic_arn
+}
