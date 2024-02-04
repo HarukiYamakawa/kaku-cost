@@ -36,21 +36,21 @@ module "security-hub" {
   source = "./module/security-hub"
 }
 
-module "sns" {
-  source = "./module/sns"
+# module "sns" {
+#   source = "./module/sns"
 
-  name_prefix = var.name_prefix
-  tag_name = var.tag_name
-  tag_group = var.tag_group
+#   name_prefix = var.name_prefix
+#   tag_name = var.tag_name
+#   tag_group = var.tag_group
 
-  email = data.aws_ssm_parameter.alart_mail_address.value
-}
+#   email = data.aws_ssm_parameter.alart_mail_address.value
+# }
 
-module "event-bridge" {
-  source = "./module/event-bridge"
+# module "event-bridge" {
+#   source = "./module/event-bridge"
 
-  sns_arn = module.sns.security_alart_topic_arn
-}
+#   sns_arn = module.sns.security_alart_topic_arn
+# }
 
 module "macie" {
   source = "./module/macie"
