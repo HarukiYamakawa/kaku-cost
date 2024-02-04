@@ -60,6 +60,10 @@ module "route53" {
   alb_zone_id = module.alb.alb_zone_id
   domain_name = data.aws_ssm_parameter.domain_name.value
   domain_zone_id = data.aws_route53_zone.default.zone_id
+
+   vpc_id = module.network.vpc_id
+   service_discovery_domain_name = var.service_discovery_domain_name
+   service_discovery_sub_domain_name = var.service_discovery_sub_domain_name
 }
 
 module "sns" {
@@ -181,6 +185,7 @@ module "ecs" {
   task_container_cpu_puma = var.task_container_cpu_puma
   task_count_puma = var.task_count_puma
   task_health_check_grace_period_seconds_puma = var.task_health_check_grace_period_seconds_puma
+  service_discovery_arn = module.route53.service_discovery_arn
 
 }
 

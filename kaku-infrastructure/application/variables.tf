@@ -10,6 +10,13 @@ variable tag_group {
   default = "kaku"
 }
 
+variable service_discovery_sub_domain_name {
+  default = "puma"
+}
+variable service_discovery_domain_name {
+  default = "kaku.local"
+}
+
 # pumaのタスク定義用
 variable image_puma_version {
   default = "v2"
@@ -35,3 +42,4 @@ variable task_count_puma {
 variable task_health_check_grace_period_seconds_puma {
   default = 60
 }
+
