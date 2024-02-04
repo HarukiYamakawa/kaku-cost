@@ -20,10 +20,11 @@ class Api::V1::ProductsController < ApplicationController
         else
           products = JSON.parse(cached_products)
         end
+        render json: { cache: "ok"}, status: :ok
       rescue StandardError
         products = Product.all
+        render json: products, status: :ok
       end
-      render json: products, status: :ok
     else
       products = Product.all
       render json: products, status: :ok

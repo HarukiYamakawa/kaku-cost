@@ -172,3 +172,32 @@ resource "aws_security_group_rule" "sg_vpc_endpoint_egress_all" {
   security_group_id = aws_security_group.sg_vpc_endpoint.id
   cidr_blocks = ["0.0.0.0/0"]
 }
+
+#redis用のセキュリティグループを定義
+resource "aws_security_group" "sg_redis" {
+  name        = "${var.name_prefix}-sg-redis"
+  vpc_id = var.vpc_id
+
+  tags = {
+    Name = "${var.tag_name}-sg-redis"
+    group = "${var.tag_group}"
+  }
+}
+
+resource "aws_security_group_rule" "sg_redis_ingress_redis_from_puma" {
+  type              = "ingress"
+  from_port         = 6379
+  to_port           = 6379
+  protocol          = "tcp"
+  security_group_id = aws_security_group.sg_redis.id
+  source_security_group_id = aws_security_group.sg_puma.id
+}
+
+resource "aws_security_group_rule" "sg_redis_egress_all" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  security_group_id = aws_security_group.sg_redis.id
+  cidr_blocks = ["0.0.0.0/0"]
+}

@@ -1,4 +1,4 @@
-name: Run rspec, rubocop, eslint, jest
+name: Run rspec, rubocop, eslint
 
 on:
   pull_request:

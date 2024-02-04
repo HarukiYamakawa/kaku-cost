@@ -51,6 +51,10 @@ resource "aws_ecs_task_definition" "task_puma" {
       {
         name      = "FRONT_DOMAIN",
         value = "https://${var.domain_name}"
+      },
+      {
+        name = "REDIS_HOST",
+        value = "${var.redis_host}"
       }
     ]
   }])

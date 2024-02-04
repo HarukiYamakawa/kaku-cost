@@ -28,6 +28,10 @@ output "private_subnet_mysql_2_id" {
     value = "${aws_subnet.private_subnet_mysql_2.id}"
 }
 
+output "private_subnet_redis_1_id" {
+    value = "${aws_subnet.private_subnet_redis_1.id}"
+}
+
 output "private_subnet_vpc_endpoint_1_id" {
     value = "${aws_subnet.private_subnet_vpc_endpoint_1.id}"
 }

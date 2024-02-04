@@ -12,6 +12,7 @@ variable tg_puma_arn {}
 
 variable primary_db_host {}
 variable db_name {}
+variable redis_host {}
 
 variable db_secret_username {}
 variable db_secret_password {}

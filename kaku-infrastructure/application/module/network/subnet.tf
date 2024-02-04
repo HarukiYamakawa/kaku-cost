@@ -79,3 +79,15 @@ resource "aws_subnet" "private_subnet_vpc_endpoint_1" {
     group = "${var.tag_group}"
   }
 }
+
+#redis用のprivateサブネット
+resource "aws_subnet" "private_subnet_redis_1" {
+  cidr_block        = local.redis_subnet_1_cidr
+  vpc_id            = aws_vpc.default.id
+  availability_zone = local.az_1
+  map_public_ip_on_launch = false
+  tags = {
+    Name = "${var.tag_name}-private-subnet-redis-1"
+    group = "${var.tag_group}"
+  }
+}
