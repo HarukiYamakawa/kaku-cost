@@ -232,5 +232,10 @@ module firehose {
   iam_role_firehose_arn = module.iam.firehose_ecs_rails_log_role_arn
   s3_bucket_log_rails_arn = module.s3.ecs_rails_log_bucket_arn
   iam_role_cwl_firehose_arn = module.iam.cwl_rails_role_arn
+
+  iam_role_firehose_nextjs_arn = module.iam.firehose_ecs_nextjs_log_role_arn
+  s3_bucket_log_nextjs_arn = module.s3.ecs_nextjs_log_bucket_arn
+  iam_role_cwl_firehose_nextjs_arn = module.iam.cwl_nextjs_role_arn
 }
+
 
