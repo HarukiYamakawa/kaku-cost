@@ -7,9 +7,9 @@ class Api::V1::ProductsController < ApplicationController
     if params[:page].present?
       products = Product.all.page(params[:page]).per(3)
       render json: products, meta: page_params(products), adapter: :json, status: :ok
-    #ログ監視環境の動作確認のためにエラーを発生させる
+    # ログ監視環境の動作確認のためにエラーを発生させる
     elsif params[:error_request].present?
-      throw "error"
+      throw 'error'
     elsif params[:cache].present?
       redis_key = 'products_list'
       begin
@@ -21,9 +21,9 @@ class Api::V1::ProductsController < ApplicationController
           $redis.set(redis_key, serialized_products)
           $redis.expire(redis_key, 10.seconds.to_i)
         else
-          products = JSON.parse(cached_products)
+          JSON.parse(cached_products)
         end
-        render json: { cache: "ok"}, status: :ok
+        render json: { cache: 'ok'}, status: :ok
       rescue StandardError
         products = Product.all
         render json: products, status: :ok

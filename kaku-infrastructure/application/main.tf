@@ -219,6 +219,7 @@ module "elasti-cache" {
 
   subnet_redis_1_id = module.network.private_subnet_redis_1_id
   sg_redis_id = module.security-group.sg_redis_id
+  redis_log_group = module.cloud-watch-logs.redis_log_group
 }
 
 module firehose {
