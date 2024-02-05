@@ -15,11 +15,11 @@ resource "aws_kinesis_firehose_delivery_stream" "rails_log_delivery_stream" {
   }
 }
 
-resource "aws_cloudwatch_log_subscription_filter" "cloudwatch_to_firehose" {
-  name            = "cloudwatch-to-firehose"
-  log_group_name  = "/kaku/puma"
-  #ロググループのログを全て取得
-  filter_pattern  = ""
-  destination_arn = aws_kinesis_firehose_delivery_stream.rails_log_delivery_stream.arn
-  role_arn        = "${var.iam_role_cwl_firehose_arn}"
-}
+# resource "aws_cloudwatch_log_subscription_filter" "cloudwatch_to_firehose" {
+#   name            = "cloudwatch-to-firehose"
+#   log_group_name  = "/kaku/puma"
+#   #ロググループのログを全て取得
+#   filter_pattern  = ""
+#   destination_arn = aws_kinesis_firehose_delivery_stream.rails_log_delivery_stream.arn
+#   role_arn        = "${var.iam_role_cwl_firehose_arn}"
+# }

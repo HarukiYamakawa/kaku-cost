@@ -62,6 +62,7 @@ resource "aws_iam_policy" "ecs_task_role_policy" {
                 "ssmmessages:OpenDataChannel",
                 "logs:CreateLogStream",
                 "logs:PutLogEvents",
+                "firehose:*"
             ],
             "Resource": "*"
         }

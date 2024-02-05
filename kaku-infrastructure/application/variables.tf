@@ -19,7 +19,7 @@ variable service_discovery_domain_name {
 
 # pumaのタスク定義用
 variable image_puma_version {
-  default = "v3"
+  default = "v4"
 }
 variable task_cpu_puma {
   default = 256
@@ -45,7 +45,7 @@ variable task_health_check_grace_period_seconds_puma {
 
 #firelens用の設定
 variable image_puma_firelens_version {
-  default = "v2"
+  default = "v6"
 }
 
 # nodejsのタスク定義用
