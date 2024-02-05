@@ -13,3 +13,7 @@ output "rds_audit_log_bucket_name" {
 output "ecs_rails_log_bucket_arn" {
   value = "${aws_s3_bucket.ecs_rails_log_bucket.arn}"
 }
+
+output "ecs_nextjs_log_bucket_arn" {
+  value = "${aws_s3_bucket.ecs_nextjs_log_bucket.arn}"
+}
