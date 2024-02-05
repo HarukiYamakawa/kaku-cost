@@ -28,3 +28,7 @@ variable task_count_puma {}
 variable task_health_check_grace_period_seconds_puma {}
 
 variable service_discovery_arn {}
+
+#firelens用の設定
+variable image_puma_firelens {}
+variable image_puma_firelens_version {}

@@ -189,6 +189,11 @@ module "ecs" {
   task_health_check_grace_period_seconds_puma = var.task_health_check_grace_period_seconds_puma
   service_discovery_arn = module.route53.service_discovery_arn
 
+  #firelens用の設定
+  image_puma_firelens = module.ecr.repository_fluentbit
+  image_puma_firelens_version = var.image_puma_firelens_version
+
+  #node.jsのタスク定義用
   sg_nodejs_id = module.security-group.sg_nodejs_id
   image_nodejs = module.ecr.nodejs_repository
   image_nodejs_version = var.image_nodejs_version
