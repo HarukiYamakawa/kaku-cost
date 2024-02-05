@@ -7,6 +7,9 @@ class Api::V1::ProductsController < ApplicationController
     if params[:page].present?
       products = Product.all.page(params[:page]).per(3)
       render json: products, meta: page_params(products), adapter: :json, status: :ok
+    #ログ監視環境の動作確認のためにエラーを発生させる
+    elsif params[:error_request].present?
+      throw "error"
     elsif params[:cache].present?
       redis_key = 'products_list'
       begin

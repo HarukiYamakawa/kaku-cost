@@ -8,7 +8,9 @@ resource "aws_ecs_task_definition" "task_puma" {
   execution_role_arn    = "${var.execution_role_arn}"
   task_role_arn         = "${var.task_role_arn}"
 
-  container_definitions = jsonencode([{
+  container_definitions = jsonencode([
+    #railsコンテナの設定
+    {
     name  = "kaku_puma",
     image = "${var.image_puma}:${var.image_puma_version}",
     essential: true,
@@ -21,14 +23,12 @@ resource "aws_ecs_task_definition" "task_puma" {
         containerPort: 80
       }
     ],
+
+    #ログドライバをfirelensに設定
     logConfiguration = {
-      logDriver = "awslogs",
-      options = {
-        "awslogs-group"         = "${var.cloudwatch_log_group_arn_puma}",
-        "awslogs-region"        = "ap-northeast-1",
-        "awslogs-stream-prefix" = "${var.name_prefix}-puma-task"
-      }
+      logDriver =  "awsfirelens"
     },
+
     secrets     = [
       {
         name= "DATABASE_USERNAME",
@@ -57,7 +57,38 @@ resource "aws_ecs_task_definition" "task_puma" {
         value = "${var.redis_host}"
       }
     ]
-  }])
+  },
+  # firelensコンテナの設定
+  {
+    name  = "kaku_puma_firelens"
+    image = "${var.image_puma_firelens}:${var.image_puma_firelens_version}",
+    essential: true,
+    memoryReservation = 256,
+    memory = 256,
+    cpu = 128,
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "/${var.name_prefix}/puma_firelens",
+        "awslogs-region": "ap-northeast-1",
+        "awslogs-stream-prefix": "puma_firelens"
+      }
+    },
+    firelensConfiguration = {
+      type = "fluentbit",
+      options = {
+          config-file-type  = "file",
+          config-file-value = "/fluent-bit/etc/extra.conf"
+        }
+    }
+    # logConfiguration = {
+    #   logDriver =  "awslogs",
+    #   options = {
+    #     "awslogs-group" = "${var.log_group_puma_name}"
+    #   }
+    # }
+  }
+  ])
 
 }
 

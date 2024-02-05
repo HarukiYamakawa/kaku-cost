@@ -28,20 +28,20 @@ resource "aws_cloudwatch_metric_alarm" "puma-status-500-alarm" {
 }
 
 #タスクのCPU使用率のメトリクスに対するアラームの作成
-resource "aws_cloudwatch_metric_alarm" "ecs-rails-cpu-usage" {
-  alarm_name          = "ecs-rails-cpu-usage"
-  namespace           = "AWS/ECS"
-  metric_name         = "CPUUtilization"
-  dimensions = {
-    ServiceName = "kaku-puma"
-    ClusterName = "kaku-puma"
-  }
-  #30秒間の平均値が0.25％以上の場合にアラームを発生
-  period              = 30
-  statistic           = "Average"
-  threshold           = 0.24
-  comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = 1
+# resource "aws_cloudwatch_metric_alarm" "ecs-rails-cpu-usage" {
+#   alarm_name          = "ecs-rails-cpu-usage"
+#   namespace           = "AWS/ECS"
+#   metric_name         = "CPUUtilization"
+#   dimensions = {
+#     ServiceName = "kaku-puma"
+#     ClusterName = "kaku-puma"
+#   }
+#   #30秒間の平均値が0.25％以上の場合にアラームを発生
+#   period              = 30
+#   statistic           = "Average"
+#   threshold           = 0.24
+#   comparison_operator = "GreaterThanThreshold"
+#   evaluation_periods  = 1
 
-  alarm_actions     = ["${var.alart_topic_arn}"]
-}
+#   alarm_actions     = ["${var.alart_topic_arn}"]
+# }

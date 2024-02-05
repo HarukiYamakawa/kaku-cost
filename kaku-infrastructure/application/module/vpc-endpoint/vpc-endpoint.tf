@@ -83,6 +83,20 @@ resource "aws_vpc_endpoint" "vpc_endpoint_ssm_messages" {
   }
 }
 
+# firehose エンドポイントの設定
+resource "aws_vpc_endpoint" "vpc_endpoint_firehose" {
+  vpc_id              = var.vpc_id
+  service_name        = "com.amazonaws.ap-northeast-1.kinesis-firehose"
+  vpc_endpoint_type   = "Interface"
+  subnet_ids          = [var.subnet_vpc_endpoint_1_id]
+  security_group_ids  = [var.sg_vpc_endpoint_id]
+  private_dns_enabled = true
+  tags = {
+      Name = "${var.tag_name}-vpc-endpoint-firehose"
+      group = "${var.tag_group}"
+  }
+}
+
 # S3との通信のためのエンドポイント
 # ECRに格納されるイメージはS3に格納されるため、S3との通信のためのエンドポイントを作成する
 resource "aws_vpc_endpoint" "vpc_endpoint_s3" {
