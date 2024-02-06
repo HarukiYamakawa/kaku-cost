@@ -67,3 +67,21 @@ module "inspector" {
 
   account_id = data.aws_caller_identity.current.account_id
 }
+
+module "cloud-trail" {
+  source = "./module/cloud-trail"
+
+  cloud_trail_log_bucket_name = module.s3.cloud_trail_log_bucket_name
+  name_prefix = var.name_prefix
+}
+
+module "vpc-flow-logs" {
+  source = "./module/vpc-flow-logs"
+
+  vpc_flow_log_bucket_arn = module.s3.vpc_flow_log_bucket_arn
+  vpc_id = data.aws_vpc.vpc.id
+}
+
+module "guard-duty" {
+  source = "./module/guard-duty"
+}
