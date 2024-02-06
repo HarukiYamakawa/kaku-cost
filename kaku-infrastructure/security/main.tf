@@ -85,3 +85,9 @@ module "vpc-flow-logs" {
 module "guard-duty" {
   source = "./module/guard-duty"
 }
+
+module "detective" {
+  source = "./module/detective"
+  account_id = data.aws_caller_identity.current.account_id
+  email_address = data.aws_ssm_parameter.alart_mail_address.value
+}
