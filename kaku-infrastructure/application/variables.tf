@@ -18,9 +18,8 @@ variable service_discovery_domain_name {
 }
 
 # pumaのタスク定義用
-variable image_puma_version {
-  default = "v4"
-}
+variable image_puma_version {}
+
 variable task_cpu_puma {
   default = 256
 }
@@ -49,9 +48,7 @@ variable image_puma_firelens_version {
 }
 
 # nodejsのタスク定義用
-variable image_nodejs_version {
-    default = "v1"
-}
+variable image_nodejs_version {}
 
 variable task_cpu_nodejs {
   default = 1024

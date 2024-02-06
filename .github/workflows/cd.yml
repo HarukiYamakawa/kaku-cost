@@ -1,0 +1,87 @@
+name: deploy
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AWS_REGION: ap-northeast-1
+  #imageのタグをgithubのshaにすることで、常に最新のimageをデプロイする
+  IMAGE_VERSION: ${{ github.sha }}
+
+jobs:
+  image_build:
+    name: build image and push to ECR
+    runs-on: ubuntu-latest
+
+    steps:
+      #AWS CLIのセットアップ
+      - name: setup aws cli
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          #Secretsに登録したAWS”のアクセスキーIDとシークレットアクセスキーを取得
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          #上記で定義したリージョンの環境変数をセット
+          aws-region: ${{ env.AWS_REGION }}
+
+      #デプロイ先の環境によって環境変数を変更
+      #本来はdevelopブランチへのpushなども想定しているが、今回はmainブランチ(prod)のみ
+      - name: Set env var for prod
+        if: github.ref == 'refs/heads/main'
+        run: echo "ENV_NAME=prod" >> $GITHUB_ENV
+
+      - uses: actions/checkout@v2
+      
+      #ECRへのログイン、認証情報はCLIの認証情報が自動で再利用される
+      - uses: aws-actions/amazon-ecr-login@v1
+        id: amazon-ecr-login
+    
+      - name: push puma image
+        env:
+          #ECRのリポジトリURLを環境変数にセット
+          ECR_REGISTRY: ${{ steps.amazon-ecr-login.outputs.registry }}
+          #ECRのリポジトリ名を環境変数にセット
+          ECR_REPOSITORY: kaku-puma
+        run: |
+          docker build -t kaku-puma -f ./kaku-backend/Dockerfile.prod ./kaku-backend
+          docker tag kaku-puma:latest ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_VERSION }}
+          docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_VERSION }}
+
+      - name: push nodejs image
+        env:
+          ECR_REGISTRY: ${{ steps.amazon-ecr-login.outputs.registry }}
+          ECR_REPOSITORY: kaku-nodejs
+        run: |
+          docker build -t kaku-nodejs -f ./kaku-frontend/Dockerfile.prod ./kaku-frontend
+          docker tag kaku-nodejs:latest ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_VERSION }}
+          docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_VERSION }}
+
+  terraform:
+    name: Depploy to AWS ECS
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: kaku-infrastructure/application
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.6.3
+
+    - name: Terraform Init
+      run: terraform init
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    - name: Terraform Apply
+      run: terraform apply -var "image_puma_version=${{ env.IMAGE_VERSION }}" -var "image_nodejs_version=${{ env.IMAGE_VERSION }}" -auto-approve
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
