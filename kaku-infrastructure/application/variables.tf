@@ -37,7 +37,7 @@ variable task_container_cpu_puma {
   default = 128
 }
 variable task_count_puma {
-  default = 0
+  default = 1
 }
 variable task_health_check_grace_period_seconds_puma {
   default = 60
@@ -45,7 +45,7 @@ variable task_health_check_grace_period_seconds_puma {
 
 #firelens用の設定
 variable image_puma_firelens_version {
-  default = "v6"
+  default = "v7"
 }
 
 # nodejsのタスク定義用
